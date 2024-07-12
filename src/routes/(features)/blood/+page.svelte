@@ -13,8 +13,8 @@
 			quick, safe, and easy way to be a hero. Just one donation can save up to three lives!
 		</p>
 		<div class="flex justify-center gap-4">
-			<Button>Donate Blood</Button>
-			<Button variant="destructive">Ask for help</Button>
+			<a href="/blood/donate"><Button>Donate Blood</Button></a>
+			<a href="/blood/request"><Button variant="destructive">Ask for help</Button></a>
 		</div>
 	</div>
 </main>
