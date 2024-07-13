@@ -6,6 +6,8 @@
 	import type { BloodRequest } from '$lib/models/BloodRequest';
 	import { getMapLoader } from '$lib/api/map';
 	import type { Loader } from '@googlemaps/js-api-loader';
+	import * as bloodApi from '$lib/api/blood';
+	import { authDataStore } from '$lib/store';
 
 	let mapView: HTMLDivElement;
 	let map: google.maps.Map;
@@ -14,10 +16,7 @@
 	let name: string;
 	let count: number;
 
-	const locations = [
-		{ lat: 24.920252967080383, lng: 91.83259465491804 },
-		{ lat: 23.87067577479274, lng: 90.4224498123803 }
-	];
+	let bloodRequests: BloodRequest[] = [];
 
 	async function initAutocomplete(loader: Loader) {
 		const { Autocomplete } = await loader.importLibrary('places');
@@ -50,7 +49,7 @@
 		});
 
 		// Add some markers to the map.
-		const markers = locations.map((position, i) => {
+		const markers = bloodRequests.map((req, i) => {
 			const label = `${i + 1}`;
 			const pinGlyph = new PinElement({
 				glyph: label,
@@ -58,18 +57,22 @@
 			});
 			const marker = new AdvancedMarkerElement({
 				map,
-				position,
+				position: { lat: req.lat, lng: req.lng },
 				content: pinGlyph.element
 			});
 
 			// markers can only be keyboard focusable when they have click listeners
 			// open info window when marker is clicked
 			marker.addListener('click', () => {
-				infoWindow.setContent(position.lat + ', ' + position.lng);
+				infoWindow.setHeaderContent(req.placeName);
+				infoWindow.setContent(
+					`Patient: ${req.patientName}\n${req.bloodGroup}\nBlood required: ${req.bagCount} Bags`
+				);
+
 				infoWindow.open(map, marker);
 				map.setOptions({
 					zoom: 14,
-					center: position
+					center: { lat: req.lat, lng: req.lng }
 				});
 			});
 
@@ -118,19 +121,11 @@
 		}
 	}
 
-	function onSubmit() {
-		const request: BloodRequest = {
-			placeName: selectedPlace.name ?? 'Untitled',
-			lat: selectedPlace.geometry?.location?.lat() ?? 0,
-			lng: selectedPlace.geometry?.location?.lng() ?? 0,
-			count: count
-		};
-
-		// TODO: send this to server
-	}
+	function onSubmit() {}
 
 	onMount(() => {
 		initMap().then(() => console.log('Map On!'));
+		bloodApi.getRequests($authDataStore?.token!).then((reqs) => (bloodRequests = reqs));
 	});
 </script>
 

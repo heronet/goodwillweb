@@ -7,6 +7,8 @@
 	import type { Loader } from '@googlemaps/js-api-loader';
 	import { getMapLoader } from '$lib/api/map';
 	import * as Select from '$lib/components/ui/select';
+	import * as bloodApi from '$lib/api/blood';
+	import { authDataStore } from '$lib/store';
 
 	let isLoading = false;
 
@@ -89,15 +91,15 @@
 		if (disabled) return;
 
 		const request: BloodRequest = {
-			placeName: selectedPlace.name ?? 'Untitled',
-			lat: selectedPlace.geometry?.location?.lat() ?? 0,
-			lng: selectedPlace.geometry?.location?.lng() ?? 0,
-			count: count,
+			placeName: selectedPlace?.name ?? 'Untitled',
+			lat: selectedPlace?.geometry?.location?.lat() ?? 0,
+			lng: selectedPlace?.geometry?.location?.lng() ?? 0,
+			bagCount: count,
 			patientName: name,
 			bloodGroup: bloodGroup
 		};
 
-		// TODO: send this to server
+		bloodApi.addRequest($authDataStore?.token!, request);
 	}
 
 	onMount(() => {
@@ -126,6 +128,6 @@
 		</Select.Root>
 		<Input placeholder="Number of Bags" type="number" bind:value={count} />
 		<div id="map" bind:this={mapView} class="h-96 w-full"></div>
-		<Button on:click={onSubmit}>Submit</Button>
+		<Button on:click={onSubmit} {disabled}>Submit</Button>
 	</div>
 </main>
