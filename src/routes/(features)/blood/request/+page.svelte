@@ -2,36 +2,25 @@
 	import Input from '$lib/components/ui/input/input.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { onMount } from 'svelte';
-	import * as gmapsLoader from '@googlemaps/js-api-loader';
-	import { PUBLIC_GOOGLE_MAPS_API_KEY, PUBLIC_GOOGLE_MAPS_MAP_ID } from '$env/static/public';
+	import { PUBLIC_GOOGLE_MAPS_MAP_ID } from '$env/static/public';
 	import type { BloodRequest } from '$lib/models/BloodRequest';
+	import type { Loader } from '@googlemaps/js-api-loader';
+	import { getMapLoader } from '$lib/api/map';
+	import * as Select from '$lib/components/ui/select';
 
-	const { Loader } = gmapsLoader;
+	let isLoading = false;
 
 	let mapView: HTMLDivElement;
+	let map: google.maps.Map;
 
 	let selectedPlace: google.maps.places.PlaceResult;
 	let name: string;
 	let count: number;
+	let bloodGroup: string;
 
-	async function initMap() {
-		const loader = new Loader({
-			apiKey: PUBLIC_GOOGLE_MAPS_API_KEY,
-			version: 'weekly'
-		});
-		const { Map } = await loader.importLibrary('maps');
-		const center = { lat: 23.80562006647949, lng: 90.4145532906334 };
-		const map = new Map(mapView, {
-			center: center,
-			zoom: 11,
-			mapId: PUBLIC_GOOGLE_MAPS_MAP_ID,
-			fullscreenControl: true,
-			mapTypeControl: false,
-			streetViewControl: true,
-			zoomControl: true,
-			maxZoom: 22
-		});
+	$: disabled = isLoading || !name || !map || !count || !bloodGroup || !selectedPlace;
 
+	async function initAutocomplete(loader: Loader) {
 		const { Autocomplete } = await loader.importLibrary('places');
 
 		const autocomplete = new Autocomplete(document.getElementById('location') as HTMLInputElement, {
@@ -48,16 +37,35 @@
 				window.alert(`No details available for input: '${place.name}'`);
 				return;
 			}
-			renderAddress(map, place);
+			renderAddress(loader, map, place);
 		});
 	}
 
-	async function renderAddress(map: google.maps.Map, place: google.maps.places.PlaceResult) {
-		const loader = new Loader({
-			apiKey: PUBLIC_GOOGLE_MAPS_API_KEY,
-			version: 'weekly'
+	async function initMap() {
+		const loader = getMapLoader();
+
+		const { Map } = await loader.importLibrary('maps');
+		const center = { lat: 23.80562006647949, lng: 90.4145532906334 };
+		map = new Map(mapView, {
+			center: center,
+			zoom: 11,
+			mapId: PUBLIC_GOOGLE_MAPS_MAP_ID,
+			fullscreenControl: true,
+			mapTypeControl: false,
+			streetViewControl: true,
+			zoomControl: true,
+			maxZoom: 22
 		});
 
+		await initAutocomplete(loader);
+	}
+
+	// On search
+	async function renderAddress(
+		loader: Loader,
+		map: google.maps.Map,
+		place: google.maps.places.PlaceResult
+	) {
 		const { AdvancedMarkerElement } = await loader.importLibrary('marker');
 
 		if (place.geometry && place.geometry.location) {
@@ -73,12 +81,20 @@
 		}
 	}
 
+	function onBloodSelect(e: any) {
+		bloodGroup = e.value;
+	}
+
 	function onSubmit() {
+		if (disabled) return;
+
 		const request: BloodRequest = {
 			placeName: selectedPlace.name ?? 'Untitled',
 			lat: selectedPlace.geometry?.location?.lat() ?? 0,
 			lng: selectedPlace.geometry?.location?.lng() ?? 0,
-			count: count
+			count: count,
+			patientName: name,
+			bloodGroup: bloodGroup
 		};
 
 		// TODO: send this to server
@@ -93,8 +109,23 @@
 	<div class="mx-auto flex max-w-xl flex-col gap-2 p-4">
 		<Input placeholder="Patient Name" bind:value={name} />
 		<Input placeholder="Hospital Name" id="location" />
+		<Select.Root onSelectedChange={onBloodSelect}>
+			<Select.Trigger>
+				<Select.Value placeholder="Blood Group" />
+			</Select.Trigger>
+			<Select.Content>
+				<Select.Item value="A+">A+</Select.Item>
+				<Select.Item value="B+">B+</Select.Item>
+				<Select.Item value="AB+">AB+</Select.Item>
+				<Select.Item value="O+">O+</Select.Item>
+				<Select.Item value="A-">A-</Select.Item>
+				<Select.Item value="B-">B-</Select.Item>
+				<Select.Item value="AB-">AB-</Select.Item>
+				<Select.Item value="O-">O-</Select.Item>
+			</Select.Content>
+		</Select.Root>
 		<Input placeholder="Number of Bags" type="number" bind:value={count} />
 		<div id="map" bind:this={mapView} class="h-96 w-full"></div>
+		<Button on:click={onSubmit}>Submit</Button>
 	</div>
-	<Button on:click={onSubmit}>Show</Button>
 </main>
