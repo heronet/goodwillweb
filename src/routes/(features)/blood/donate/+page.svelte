@@ -17,11 +17,10 @@
 	let mapView: HTMLDivElement;
 	let map: google.maps.Map;
 
-	let selectedPlace: google.maps.places.PlaceResult;
 	let count: number;
 
 	let bloodRequests: BloodRequest[] = [];
-	let selectedRequest: BloodRequest;
+	let selectedRequest: BloodRequest | undefined;
 
 	let searchTerm = '';
 	$: filteredRequests = bloodRequests.filter(
@@ -30,27 +29,6 @@
 			r.placeName.toLowerCase().includes(searchTerm.trim().toLowerCase()) ||
 			r.patientName.toLowerCase().includes(searchTerm.trim().toLowerCase())
 	);
-
-	async function initAutocomplete() {
-		const { Autocomplete } = await loader.importLibrary('places');
-
-		const autocomplete = new Autocomplete(document.getElementById('location') as HTMLInputElement, {
-			fields: ['address_components', 'geometry', 'name', 'icon'],
-			types: ['hospital'],
-			componentRestrictions: { country: 'bd' }
-		});
-
-		autocomplete.addListener('place_changed', () => {
-			const place = autocomplete.getPlace();
-			if (!place.geometry) {
-				// User entered the name of a Place that was not suggested and
-				// pressed the Enter key, or the Place Details request failed.
-				window.alert(`No details available for input: '${place.name}'`);
-				return;
-			}
-			renderAddress(place);
-		});
-	}
 
 	async function initMarkers() {
 		const { AdvancedMarkerElement, PinElement } = await loader.importLibrary('marker');
@@ -125,25 +103,7 @@
 			maxZoom: 22
 		});
 
-		await initAutocomplete();
 		await initMarkers();
-	}
-
-	// On search
-	async function renderAddress(place: google.maps.places.PlaceResult) {
-		const { AdvancedMarkerElement } = await loader.importLibrary('marker');
-
-		if (place.geometry && place.geometry.location) {
-			map.setOptions({
-				center: place.geometry.location,
-				zoom: 15
-			});
-			const marker = new AdvancedMarkerElement({
-				map,
-				position: place.geometry.location
-			});
-			selectedPlace = place;
-		}
 	}
 
 	async function setLocation(req: BloodRequest) {
@@ -162,29 +122,28 @@
 	async function submitDonation() {
 		const donation: BloodDonation = {
 			bagCount: count,
-			bloodRequestId: selectedRequest.id!
+			bloodRequestId: selectedRequest?.id!
 		};
 		isLoading = true;
-		bloodApi
-			.addDonation($authDataStore?.token!, donation)
-			.then(() => {
-				getBloodRequests();
-				toast('Your donation was successful!');
-			})
-			.finally(() => (isLoading = false));
+		await bloodApi.addDonation($authDataStore?.token!, donation);
+		await getBloodRequests();
+		await initMap();
+
+		selectedRequest = undefined;
+		isLoading = false;
+		toast('Your donation was successful!');
 	}
 
 	async function getBloodRequests() {
 		isLoading = true;
-		bloodApi
-			.getRequests($authDataStore?.token!)
-			.then((reqs) => (bloodRequests = reqs))
-			.finally(() => (isLoading = false));
+		bloodRequests = await bloodApi.getRequests($authDataStore?.token!);
+		isLoading = false;
 	}
 
 	onMount(() => {
-		initMap().then(() => console.log('Map On!'));
-		getBloodRequests();
+		getBloodRequests().then(() => {
+			initMap().then(() => console.log('Map On!'));
+		});
 	});
 </script>
 

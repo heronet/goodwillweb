@@ -11,8 +11,6 @@ export async function addRequest(token: string, bloodReq: BloodRequest) {
 		},
 		body: JSON.stringify(bloodReq)
 	}).then((r) => r.json());
-
-	console.log(res);
 }
 
 export async function getRequests(token: string): Promise<BloodRequest[]> {
