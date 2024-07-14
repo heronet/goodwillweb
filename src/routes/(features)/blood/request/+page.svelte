@@ -9,6 +9,7 @@
 	import * as Select from '$lib/components/ui/select';
 	import * as bloodApi from '$lib/api/blood';
 	import { authDataStore } from '$lib/store';
+	import { toast } from 'svelte-sonner';
 
 	let isLoading = false;
 
@@ -98,8 +99,12 @@
 			patientName: name,
 			bloodGroup: bloodGroup
 		};
+		isLoading = true;
 
-		bloodApi.addRequest($authDataStore?.token!, request);
+		bloodApi
+			.addRequest($authDataStore?.token!, request)
+			.then(() => toast('You requested successfully!'))
+			.finally(() => (isLoading = false));
 	}
 
 	onMount(() => {
@@ -128,6 +133,6 @@
 		</Select.Root>
 		<Input placeholder="Number of Bags" type="number" bind:value={count} />
 		<div id="map" bind:this={mapView} class="h-96 w-full"></div>
-		<Button on:click={onSubmit} {disabled}>Submit</Button>
+		<Button on:click={onSubmit} {disabled}>{isLoading ? 'Please Wait...' : 'Submit'}</Button>
 	</div>
 </main>
