@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@google/generative-ai':
+        specifier: ^0.14.1
+        version: 0.14.1
       '@googlemaps/js-api-loader':
         specifier: ^1.16.6
         version: 1.16.6
@@ -279,6 +282,10 @@ packages:
 
   '@floating-ui/utils@0.2.4':
     resolution: {integrity: sha512-dWO2pw8hhi+WrXq1YJy2yCuWoL20PddgGaqTgVe4cOS9Q6qklXCiA1tJEqX6BEwRNSCP84/afac9hd4MS+zEUA==}
+
+  '@google/generative-ai@0.14.1':
+    resolution: {integrity: sha512-pevEyZCb0Oc+dYNlSberW8oZBm4ofeTD5wN01TowQMhTwdAbGAnJMtQzoklh6Blq2AKsx8Ox6FWa44KioZLZiA==}
+    engines: {node: '>=18.0.0'}
 
   '@googlemaps/js-api-loader@1.16.6':
     resolution: {integrity: sha512-V8p5W9DbPQx74jWUmyYJOerhiB4C+MHekaO0ZRmc6lrOYrvY7+syLhzOWpp55kqSPeNb+qbC2h8i69aLIX6krQ==}
@@ -1773,6 +1780,8 @@ snapshots:
       '@floating-ui/utils': 0.2.4
 
   '@floating-ui/utils@0.2.4': {}
+
+  '@google/generative-ai@0.14.1': {}
 
   '@googlemaps/js-api-loader@1.16.6':
     dependencies:

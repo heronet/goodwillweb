@@ -10,6 +10,7 @@
 	import { authDataStore } from '$lib/store';
 	import type { BloodDonation } from '$lib/models/BloodDonation';
 	import { toast } from 'svelte-sonner';
+	import Ai from './components/ai.svelte';
 
 	let isLoading = false;
 
@@ -154,7 +155,7 @@
 		class="inline-block min-h-[calc(100dvh-4rem)] w-full flex-1"
 	></div>
 	<div
-		class="top-1/6 absolute left-0 z-10 m-8 h-[90%] w-96 overflow-y-auto rounded-xl bg-[#202124] py-4"
+		class="absolute left-0 top-10 z-10 m-8 max-h-[90%] w-96 overflow-y-auto rounded-xl bg-[#202124] py-4"
 	>
 		<div class="p-4">
 			<p class="mb-4 text-3xl">Advanced Search</p>
@@ -201,5 +202,10 @@
 				disabled={isLoading}>{isLoading ? 'Please wait...' : 'Submit'}</Button
 			>
 		</div>
+	{/if}
+
+	<!-- AI -->
+	{#if bloodRequests.length > 0}
+		<Ai requests={bloodRequests} />
 	{/if}
 </main>
