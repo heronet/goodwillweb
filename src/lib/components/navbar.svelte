@@ -1,4 +1,5 @@
 <script>
+	import { removeAuthData } from '$lib/api/auth/app';
 	import { authDataStore } from '$lib/store';
 	import Button from './ui/button/button.svelte';
 </script>
@@ -9,6 +10,7 @@
 		<div>
 			{#if $authDataStore}
 				<a href="/profile"><Button>Profile</Button></a>
+				<Button on:click={removeAuthData}>Logout</Button>
 			{:else}
 				<a href="/auth/login"><Button>Login</Button></a>
 			{/if}

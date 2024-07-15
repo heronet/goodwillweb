@@ -1,8 +1,5 @@
 <script lang="ts">
 	import Button from '$lib/components/ui/button/button.svelte';
-	import type { PageData } from './$types';
-
-	export let data: PageData;
 </script>
 
 <main class="mx-auto max-w-screen-xl p-4">
