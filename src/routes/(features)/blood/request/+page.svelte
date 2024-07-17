@@ -10,6 +10,7 @@
 	import * as bloodApi from '$lib/api/blood';
 	import { authDataStore } from '$lib/store';
 	import { toast } from 'svelte-sonner';
+	import { goto } from '$app/navigation';
 
 	let isLoading = false;
 
@@ -103,7 +104,10 @@
 
 		bloodApi
 			.addRequest($authDataStore?.token!, request)
-			.then(() => toast('You requested successfully!'))
+			.then(() => {
+				toast('You requested successfully!');
+				goto('/blood/donate');
+			})
 			.finally(() => (isLoading = false));
 	}
 
@@ -114,6 +118,8 @@
 
 <main>
 	<div class="mx-auto flex max-w-xl flex-col gap-2 p-4">
+		<p class="mt-16 text-center text-5xl">Who needs <span class="text-red-500">blood</span>?</p>
+		<p class="mb-12 text-center">Please fill up the form</p>
 		<Input placeholder="Patient Name" bind:value={name} />
 		<Input placeholder="Hospital Name" id="location" />
 		<Select.Root onSelectedChange={onBloodSelect}>

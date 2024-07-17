@@ -205,7 +205,5 @@
 	{/if}
 
 	<!-- AI -->
-	{#if bloodRequests.length > 0}
-		<Ai requests={bloodRequests} />
-	{/if}
+	<Ai requests={bloodRequests} />
 </main>

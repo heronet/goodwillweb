@@ -10,6 +10,7 @@
 	import { authDataStore } from '$lib/store';
 	import { toast } from 'svelte-sonner';
 	import type { User } from '$lib/models/User';
+	import { goto } from '$app/navigation';
 
 	let isLoading = false;
 
@@ -27,7 +28,7 @@
 
 		const autocomplete = new Autocomplete(document.getElementById('location') as HTMLInputElement, {
 			fields: ['address_components', 'geometry', 'name', 'icon'],
-			types: ['hospital'],
+			types: ['establishment'],
 			componentRestrictions: { country: 'bd' }
 		});
 
@@ -60,6 +61,7 @@
 		});
 
 		await initAutocomplete(loader);
+		setLocation(loader);
 	}
 
 	// On search
@@ -102,16 +104,29 @@
 
 		userApi
 			.updateProfile($authDataStore?.token!, profile)
-			.then(() => toast('Profile updated successfully!'))
+			.then(() => {
+				toast('Profile updated successfully!');
+				goto('/');
+			})
 			.finally(() => (isLoading = false));
 	}
 
-	onMount(() => {
-		initMap().then(() => console.log('Map On!'));
+	async function setLocation(loader: Loader) {
+		const { AdvancedMarkerElement } = await loader.importLibrary('marker');
+		map.setOptions({
+			zoom: 15,
+			center: { lat: user.lat!, lng: user.lng! }
+		});
+		const marker = new AdvancedMarkerElement({
+			map,
+			position: { lat: user.lat!, lng: user.lng! }
+		});
+	}
 
+	onMount(() => {
 		userApi.getProfile($authDataStore?.token!).then((res) => {
-			console.log(res);
 			user = res;
+			initMap().then(() => console.log('Map On!'));
 		});
 	});
 </script>
@@ -120,7 +135,7 @@
 	<div class="mx-auto flex max-w-xl flex-col gap-2 p-4">
 		<p class="my-4 text-center text-4xl">Your Profile</p>
 		<Input placeholder="Your Name" bind:value={user.name} />
-		<Input placeholder="Nearest Hospital" id="location" bind:value={user.placeName} />
+		<Input placeholder="Location" id="location" bind:value={user.placeName} />
 		<Select.Root
 			onSelectedChange={onBloodSelect}
 			selected={{ value: user?.bloodGroup, label: user?.bloodGroup }}

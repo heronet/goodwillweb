@@ -6,14 +6,14 @@
 	<div>
 		<a
 			href="/blood"
-			class="float-left w-[60%] rounded-r-full bg-primary px-8 py-6 text-primary-foreground"
+			class="float-left w-[60%] rounded-r-full bg-red-600 px-8 py-6 text-white hover:bg-red-700"
 		>
 			<p class="text-3xl font-bold">Exchange blood</p>
 			<p class="">Donate blood to save lives, or seek help from donors</p>
 		</a>
 		<a
 			href="/flood"
-			class="float-right mt-8 w-[60%] justify-self-end rounded-l-full bg-primary px-8 py-6 text-primary-foreground"
+			class="float-right mt-8 w-[60%] justify-self-end rounded-l-full bg-blue-600 px-8 py-6 text-white hover:bg-blue-700"
 		>
 			<p class="text-3xl font-bold">Help Flooded locations</p>
 			<p>Donate blood to save lives, or seek help from donors</p>
