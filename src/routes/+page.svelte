@@ -12,10 +12,10 @@
 			<p class="">Donate blood to save lives, or seek help from donors</p>
 		</a>
 		<a
-			href="/flood"
+			href="/manpower"
 			class="float-right mt-8 w-[60%] justify-self-end rounded-l-full bg-blue-600 px-8 py-6 text-white hover:bg-blue-700"
 		>
-			<p class="text-3xl font-bold">Help Flooded locations</p>
+			<p class="text-3xl font-bold">Volunteer with manpower</p>
 			<p>Donate blood to save lives, or seek help from donors</p>
 		</a>
 	</div>

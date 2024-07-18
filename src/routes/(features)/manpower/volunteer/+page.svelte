@@ -3,14 +3,14 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { onMount } from 'svelte';
 	import { PUBLIC_GOOGLE_MAPS_MAP_ID } from '$env/static/public';
-	import type { BloodRequest } from '$lib/models/BloodRequest';
+	import type { ManpowerRequest } from '$lib/models/ManpowerRequest';
 	import { getMapLoader } from '$lib/api/map';
 	import type { Loader } from '@googlemaps/js-api-loader';
-	import * as bloodApi from '$lib/api/blood';
+	import * as manpowerApi from '$lib/api/manpower';
 	import { authDataStore } from '$lib/store';
-	import type { BloodDonation } from '$lib/models/BloodDonation';
 	import { toast } from 'svelte-sonner';
 	import Ai from './components/ai.svelte';
+	import type { ManpowerResponse } from '$lib/models/ManpowerResponse';
 
 	let isLoading = false;
 
@@ -20,15 +20,14 @@
 
 	let count: number;
 
-	let bloodRequests: BloodRequest[] = [];
-	let selectedRequest: BloodRequest | undefined;
+	let manpowerRequests: ManpowerRequest[] = [];
+	let selectedRequest: ManpowerRequest | undefined;
 
 	let searchTerm = '';
-	$: filteredRequests = bloodRequests.filter(
+	$: filteredRequests = manpowerRequests.filter(
 		(r) =>
-			r.bloodGroup.toLowerCase().includes(searchTerm.trim().toLowerCase()) ||
-			r.placeName.toLowerCase().includes(searchTerm.trim().toLowerCase()) ||
-			r.patientName.toLowerCase().includes(searchTerm.trim().toLowerCase())
+			r.incidentType.toLowerCase().includes(searchTerm.trim().toLowerCase()) ||
+			r.placeName.toLowerCase().includes(searchTerm.trim().toLowerCase())
 	);
 
 	async function initMarkers() {
@@ -41,7 +40,7 @@
 		});
 
 		// Add some markers to the map.
-		const markers = bloodRequests.map((req, i) => {
+		const markers = manpowerRequests.map((req, i) => {
 			const label = `${i + 1}`;
 			const pinGlyph = new PinElement({
 				glyph: label,
@@ -64,13 +63,13 @@
 							
 						>
 							<h1 class="w-80 text-2xl font-bold">${req.placeName}</h1>
-							<p class="">Patient: ${req.patientName}</p>
+							<p class="">Incident: ${req.incidentType}</p>
 							<div class="mt-2 flex justify-between ">
 								<p>
-									<span class="text-3xl font-bold">${req.bagCount} </span>
-									bags needed
+									<span class="text-3xl font-bold">${req.volunteerCount} </span>
+									volunteers needed
 								</p>
-								<span class="text-3xl font-bold">${req.bloodGroup}</span>
+								<span class="text-3xl font-bold">${'Good'}</span>
 							</div>
 						</div>
 					</div>`
@@ -107,7 +106,7 @@
 		await initMarkers();
 	}
 
-	async function setLocation(req: BloodRequest) {
+	async function setLocation(req: ManpowerRequest) {
 		const { AdvancedMarkerElement } = await loader.importLibrary('marker');
 		map.setOptions({
 			zoom: 15,
@@ -120,29 +119,29 @@
 		selectedRequest = req;
 	}
 
-	async function submitDonation() {
-		const donation: BloodDonation = {
-			bagCount: count,
-			bloodRequestId: selectedRequest?.id!
+	async function submitVolunteer() {
+		const response: ManpowerResponse = {
+			volunteerCount: count,
+			manpowerRequestId: selectedRequest?.id!
 		};
 		isLoading = true;
-		await bloodApi.addDonation($authDataStore?.token!, donation);
-		await getBloodRequests();
+		await manpowerApi.addVolunteer($authDataStore?.token!, response);
+		await getManpowerRequests();
 		await initMap();
 
 		selectedRequest = undefined;
 		isLoading = false;
-		toast('Your donation was successful!');
+		toast('Your response was successful!');
 	}
 
-	async function getBloodRequests() {
+	async function getManpowerRequests() {
 		isLoading = true;
-		bloodRequests = await bloodApi.getRequests($authDataStore?.token!);
+		manpowerRequests = await manpowerApi.getRequests($authDataStore?.token!);
 		isLoading = false;
 	}
 
 	onMount(() => {
-		getBloodRequests().then(() => {
+		getManpowerRequests().then(() => {
 			initMap().then(() => console.log('Map On!'));
 		});
 	});
@@ -172,13 +171,13 @@
 					on:click={() => setLocation(request)}
 				>
 					<h1 class="w-80 text-2xl font-bold text-indigo-100">{request.placeName}</h1>
-					<p class="text-indigo-200">Patient: {request.patientName}</p>
+					<p class="text-indigo-200">Incident: {request.incidentType}</p>
 					<div class="mt-2 flex justify-between text-indigo-200">
 						<p>
-							<span class="text-3xl font-bold">{request.bagCount} </span>
-							bags needed
+							<span class="text-3xl font-bold">{request.volunteerCount} </span>
+							volunteers needed
 						</p>
-						<span class="text-3xl font-bold">{request.bloodGroup}</span>
+						<span class="text-3xl font-bold">{'Good'}</span>
 					</div>
 				</button>
 			</div>
@@ -198,12 +197,12 @@
 			/>
 			<Button
 				class="w-full bg-indigo-500 text-indigo-100"
-				on:click={submitDonation}
+				on:click={submitVolunteer}
 				disabled={isLoading}>{isLoading ? 'Please wait...' : 'Submit'}</Button
 			>
 		</div>
 	{/if}
 
 	<!-- AI -->
-	<Ai requests={bloodRequests} />
+	<Ai requests={manpowerRequests} />
 </main>

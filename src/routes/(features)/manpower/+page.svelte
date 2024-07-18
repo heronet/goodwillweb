@@ -16,8 +16,8 @@
 			community. Together, we can weather any storm and rebuild stronger than ever.
 		</p>
 		<div class="flex justify-center gap-4">
-			<a href="/flood/volunteer"><Button>Volunteer</Button></a>
-			<a href="/flood/request"
+			<a href="/manpower/volunteer"><Button>Volunteer</Button></a>
+			<a href="/manpower/request"
 				><Button variant="secondary" class="bg-blue-700 text-white hover:bg-blue-800"
 					>Ask for help</Button
 				></a

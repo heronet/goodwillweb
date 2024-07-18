@@ -7,12 +7,12 @@
 	import * as userApi from '$lib/api/user';
 	import { onMount } from 'svelte';
 	import type { ChatSession } from '@google/generative-ai';
-	import type { BloodRequest } from '$lib/models/BloodRequest';
+	import type { ManpowerRequest } from '$lib/models/ManpowerRequest';
 	import { authDataStore } from '$lib/store';
 
 	let isLoading = false;
 	let expanded = true;
-	export let requests: BloodRequest[];
+	export let requests: ManpowerRequest[];
 
 	let reqText = '';
 	let resText = '';
