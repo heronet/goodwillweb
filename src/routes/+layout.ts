@@ -1,5 +1,5 @@
 import { browser } from '$app/environment';
-import { authDataStore, facebookCredentialsStore } from '$lib/store';
+import { authDataStore, oauthCredentialsStore } from '$lib/store';
 import type { LayoutLoad } from './$types';
 
 import type { AuthData } from '$lib/models/AuthData';
@@ -13,11 +13,11 @@ export const load: LayoutLoad = async () => {
 			authDataStore.set(credential);
 		}
 
-		// Set the facebook credentials
-		const fbCredentialStr = localStorage.getItem('fbCredential');
-		if (fbCredentialStr) {
-			const credential = JSON.parse(fbCredentialStr) as FacebookCredential;
-			facebookCredentialsStore.set(credential);
+		// Set the oauth credentials
+		const oaCredentialStr = localStorage.getItem('oaCredential');
+		if (oaCredentialStr) {
+			const credential = JSON.parse(oaCredentialStr) as OAuthCredential;
+			oauthCredentialsStore.set(credential);
 		}
 	}
 	return {};

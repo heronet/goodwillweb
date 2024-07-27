@@ -1,4 +1,4 @@
-import { facebookCredentialsStore } from '$lib/store';
+import { oauthCredentialsStore } from '$lib/store';
 import { PUBLIC_FACEBOOK_CLIENT_ID, PUBLIC_FACEBOOK_REDIRECT_URL } from '$env/static/public';
 import type { AuthData } from '$lib/models/AuthData';
 import { setAuthData } from './app';
@@ -18,12 +18,3 @@ export async function facebookSSO(code: string) {
 	setAuthData(res);
 	return res;
 }
-
-export const setFacebookCredentials = (credential: FacebookCredential) => {
-	localStorage.setItem('fbCredential', JSON.stringify(credential));
-	facebookCredentialsStore.set(credential);
-};
-export const removeFacebookCredentials = () => {
-	facebookCredentialsStore.set(null);
-	localStorage.removeItem('fbCredential');
-};
