@@ -21,6 +21,7 @@
 							<DropdownMenu.Label>My Account</DropdownMenu.Label>
 							<DropdownMenu.Separator />
 							<DropdownMenu.Item on:click={() => goto('/profile')}>Profile</DropdownMenu.Item>
+							<DropdownMenu.Item on:click={() => goto('/log')}>Log</DropdownMenu.Item>
 							<DropdownMenu.Item on:click={removeAuthData}>Logout</DropdownMenu.Item>
 						</DropdownMenu.Group>
 					</DropdownMenu.Content>
