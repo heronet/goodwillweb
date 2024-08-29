@@ -21,9 +21,9 @@
 
 	let textwall: HTMLDivElement;
 
-	async function sendMessage() {
-		history = [...history, { role: 'user', message: reqText }];
-		const result = await chat.sendMessageStream(reqText);
+	async function sendMessage(text: string) {
+		history = [...history, { role: 'user', message: text }];
+		const result = await chat.sendMessageStream(text);
 
 		for await (const chunk of result.stream) {
 			const chunkText = chunk.text();
@@ -34,6 +34,21 @@
 		resText = '';
 		textwall.scrollTop = textwall.scrollHeight;
 	}
+	async function sendInitMessage() {
+		const result = await chat.sendMessageStream(
+			'Greet me with the nearest patient to my location and name their location with minimal text'
+		);
+
+		for await (const chunk of result.stream) {
+			const chunkText = chunk.text();
+			resText += chunkText;
+		}
+		history = [...history, { role: 'ai', message: resText }];
+
+		resText = '';
+		textwall.scrollTop = textwall.scrollHeight;
+	}
+
 	onMount(() => {
 		isLoading = true;
 		userApi
@@ -49,6 +64,7 @@
 					.then((res) => {
 						chat = res;
 						console.log('Chat On!');
+						sendInitMessage();
 					})
 					.finally(() => (isLoading = false));
 			})
@@ -69,9 +85,9 @@
 		<img src={arrow} alt="arr_d" />
 	</button>
 	{#if expanded}
-		<div class="h-[300px] overflow-y-scroll py-8 pr-4 text-sm" bind:this={textwall}>
+		<div class="h-[300px] overflow-y-scroll pr-4 text-sm" bind:this={textwall}>
 			{#if history.length === 0}
-				<p class="text-center text-indigo-300">Start chatting with AI</p>
+				<p class="py-8 text-center text-indigo-300">Start chatting with AI</p>
 				<p class="p-8 text-center text-muted-foreground">
 					Ask it questions like <span class="text-indigo-300"
 						>What is the nearest hospital for me?</span
@@ -109,7 +125,10 @@
 			{/if}
 		</div>
 
-		<form on:submit|preventDefault={sendMessage} class="flex items-center gap-2 p-4 text-sm">
+		<form
+			on:submit|preventDefault={() => sendMessage(reqText)}
+			class="flex items-center gap-2 p-4 text-sm"
+		>
 			<Input placeholder="Ask AI" class="bg-indigo-100 py-5 text-black" bind:value={reqText} />
 			<Button type="submit" class="bg-indigo-100 py-5 hover:bg-indigo-200">
 				<img src={send} alt="sendbtn" />

@@ -94,6 +94,7 @@
 
 		const profile: User = {
 			placeName: selectedPlace?.name ?? '',
+			phone: user.phone ?? '',
 			lat: selectedPlace?.geometry?.location?.lat() ?? 0,
 			lng: selectedPlace?.geometry?.location?.lng() ?? 0,
 			name: user?.name ?? '',
@@ -136,6 +137,7 @@
 		<p class="my-4 text-center text-4xl">Your Profile</p>
 		<Input placeholder="Your Name" bind:value={user.name} />
 		<Input placeholder="Location" id="location" bind:value={user.placeName} />
+		<Input placeholder="Phone Number" id="phone" bind:value={user.phone} />
 		<Select.Root
 			onSelectedChange={onBloodSelect}
 			selected={{ value: user?.bloodGroup, label: user?.bloodGroup }}

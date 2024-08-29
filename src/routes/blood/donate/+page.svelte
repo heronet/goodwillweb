@@ -109,6 +109,8 @@
 
 	async function setLocation(req: BloodRequest) {
 		const { AdvancedMarkerElement } = await loader.importLibrary('marker');
+		const { InfoWindow } = await loader.importLibrary('maps');
+
 		map.setOptions({
 			zoom: 15,
 			center: { lat: req.lat, lng: req.lng }
@@ -116,6 +118,40 @@
 		const marker = new AdvancedMarkerElement({
 			map,
 			position: { lat: req.lat, lng: req.lng }
+		});
+		const infoWindow = new InfoWindow({
+			content: '',
+			disableAutoPan: true
+		});
+		marker.addListener('click', () => {
+			infoWindow.setHeaderContent(req.placeName);
+			infoWindow.setContent(
+				`<div class="px-4 text-black">
+						<div
+							class="w-full rounded-xl text-start"
+							
+						>
+							<h1 class="w-80 text-2xl font-bold">${req.placeName}</h1>
+							<p class="">Patient: ${req.patientName}</p>
+							<p class="">Phone: ${req.phone}</p>
+							<div class="mt-2 flex justify-between ">
+								<p>
+									<span class="text-3xl font-bold">${req.bagCount} </span>
+									bags needed
+								</p>
+								<span class="text-3xl font-bold">${req.bloodGroup}</span>
+							</div>
+						</div>
+					</div>
+					`
+			);
+
+			infoWindow.open(map, marker);
+			map.setOptions({
+				zoom: 14,
+				center: { lat: req.lat, lng: req.lng }
+			});
+			selectedRequest = req;
 		});
 		selectedRequest = req;
 	}
@@ -173,6 +209,7 @@
 				>
 					<h1 class="w-80 text-2xl font-bold text-indigo-100">{request.placeName}</h1>
 					<p class="text-indigo-200">Patient: {request.patientName}</p>
+					<p class="text-indigo-200">Contact: {request.phone}</p>
 					<div class="mt-2 flex justify-between text-indigo-200">
 						<p>
 							<span class="text-3xl font-bold">{request.bagCount} </span>
@@ -188,7 +225,7 @@
 	<!-- Only show when selected -->
 	{#if selectedRequest}
 		<div
-			class="top-1/6 absolute right-0 z-10 m-8 h-fit w-96 overflow-y-auto rounded-xl bg-[#202124] p-4"
+			class="absolute right-5 top-10 z-10 m-8 h-fit w-96 overflow-y-auto rounded-xl bg-[#202124] p-4"
 		>
 			<p class="mb-4 text-3xl">Will you donate?</p>
 			<Input

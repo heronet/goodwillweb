@@ -2,6 +2,9 @@
 	import { removeAuthData } from '$lib/api/auth/app';
 	import { authDataStore } from '$lib/store';
 	import Button from './ui/button/button.svelte';
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+	import avater from '$lib/assets/avatar.svg';
+	import { goto } from '$app/navigation';
 </script>
 
 <section>
@@ -9,8 +12,19 @@
 		<p class="font-bold"><a href="/">GoodWill</a></p>
 		<div>
 			{#if $authDataStore}
-				<a href="/profile"><Button>Profile</Button></a>
-				<Button on:click={removeAuthData}>Logout</Button>
+				<DropdownMenu.Root>
+					<DropdownMenu.Trigger class="flex items-center">
+						<img src={avater} alt="avater" class="h-9 w-9" />
+					</DropdownMenu.Trigger>
+					<DropdownMenu.Content>
+						<DropdownMenu.Group>
+							<DropdownMenu.Label>My Account</DropdownMenu.Label>
+							<DropdownMenu.Separator />
+							<DropdownMenu.Item on:click={() => goto('/profile')}>Profile</DropdownMenu.Item>
+							<DropdownMenu.Item on:click={removeAuthData}>Logout</DropdownMenu.Item>
+						</DropdownMenu.Group>
+					</DropdownMenu.Content>
+				</DropdownMenu.Root>
 			{:else}
 				<a href="/auth/login"><Button>Login</Button></a>
 			{/if}

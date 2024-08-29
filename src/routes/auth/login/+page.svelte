@@ -13,8 +13,8 @@
 		<Button on:click={googleApi.register}
 			><img src={google} alt="" class="mr-3 h-full" /> Login with Google</Button
 		>
-		<Button on:click={facebookApi.register}
+		<!-- <Button on:click={facebookApi.register}
 			><img src={fb} alt="" class="mr-3 h-full" /> Login with Facebook</Button
-		>
+		> -->
 	</div>
 </main>

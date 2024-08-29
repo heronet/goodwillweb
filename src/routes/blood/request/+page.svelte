@@ -21,6 +21,7 @@
 	let name: string;
 	let count: number;
 	let bloodGroup: string;
+	let phone: string;
 
 	$: disabled = isLoading || !name || !map || !count || !bloodGroup || !selectedPlace;
 
@@ -98,7 +99,8 @@
 			lng: selectedPlace?.geometry?.location?.lng() ?? 0,
 			bagCount: count,
 			patientName: name,
-			bloodGroup: bloodGroup
+			bloodGroup: bloodGroup,
+			phone: phone
 		};
 		isLoading = true;
 
@@ -138,6 +140,7 @@
 			</Select.Content>
 		</Select.Root>
 		<Input placeholder="Number of Bags" type="number" bind:value={count} />
+		<Input placeholder="Phone" type="text" bind:value={phone} />
 		<div id="map" bind:this={mapView} class="h-96 w-full"></div>
 		<Button on:click={onSubmit} {disabled}>{isLoading ? 'Please Wait...' : 'Submit'}</Button>
 	</div>
