@@ -36,6 +36,4 @@ export async function addVolunteer(token: string, response: ManpowerResponse) {
 		},
 		body: JSON.stringify(response)
 	}).then((r) => r.json());
-
-	console.log(res);
 }

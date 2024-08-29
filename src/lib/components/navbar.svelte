@@ -8,7 +8,7 @@
 </script>
 
 <section>
-	<div class="fixed flex h-16 w-full items-center justify-between border-b p-4">
+	<div class="fixed flex h-16 w-full items-center justify-between border-b bg-black p-4">
 		<p class="font-bold"><a href="/">GoodWill</a></p>
 		<div>
 			{#if $authDataStore}

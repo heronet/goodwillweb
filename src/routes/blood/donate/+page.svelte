@@ -228,6 +228,8 @@
 			class="absolute right-5 top-10 z-10 m-8 h-fit w-96 overflow-y-auto rounded-xl bg-[#202124] p-4"
 		>
 			<p class="mb-4 text-3xl">Will you donate?</p>
+			<p>{selectedRequest.placeName}</p>
+			<p>Bags needed: {selectedRequest.bagCount}</p>
 			<Input
 				placeholder="How mane bags?"
 				class=" my-2 bg-indigo-100 py-6 text-black"

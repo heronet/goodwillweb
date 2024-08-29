@@ -35,6 +35,4 @@ export async function addDonation(token: string, donation: BloodDonation) {
 		},
 		body: JSON.stringify(donation)
 	}).then((r) => r.json());
-
-	console.log(res);
 }

@@ -63,13 +63,13 @@
 							
 						>
 							<h1 class="w-80 text-2xl font-bold">${req.placeName}</h1>
+							<p class="">Contact: ${req.phone}</p>
 							<p class="">Incident: ${req.incidentType}</p>
 							<div class="mt-2 flex justify-between ">
 								<p>
 									<span class="text-3xl font-bold">${req.volunteerCount} </span>
 									volunteers needed
 								</p>
-								<span class="text-3xl font-bold">${'Good'}</span>
 							</div>
 						</div>
 					</div>`
@@ -108,6 +108,8 @@
 
 	async function setLocation(req: ManpowerRequest) {
 		const { AdvancedMarkerElement } = await loader.importLibrary('marker');
+		const { InfoWindow } = await loader.importLibrary('maps');
+
 		map.setOptions({
 			zoom: 15,
 			center: { lat: req.lat, lng: req.lng }
@@ -116,6 +118,44 @@
 			map,
 			position: { lat: req.lat, lng: req.lng }
 		});
+
+		const infoWindow = new InfoWindow({
+			content: '',
+			disableAutoPan: true
+		});
+
+		// markers can only be keyboard focusable when they have click listeners
+		// open info window when marker is clicked
+		marker.addListener('click', () => {
+			infoWindow.setHeaderContent(req.placeName);
+			infoWindow.setContent(
+				`<div class="px-4 text-black">
+						<div
+							class="w-full rounded-xl text-start"
+							
+						>
+							<h1 class="w-80 text-2xl font-bold">${req.placeName}</h1>
+							<p class="">Contact: ${req.phone}</p>
+							<p class="">Incident: ${req.incidentType}</p>
+							<div class="mt-2 flex justify-between ">
+								<p>
+									<span class="text-3xl font-bold">${req.volunteerCount} </span>
+									volunteers needed
+								</p>
+								
+							</div>
+						</div>
+					</div>`
+			);
+
+			infoWindow.open(map, marker);
+			map.setOptions({
+				zoom: 14,
+				center: { lat: req.lat, lng: req.lng }
+			});
+			selectedRequest = req;
+		});
+
 		selectedRequest = req;
 	}
 
@@ -159,7 +199,7 @@
 		<div class="p-4">
 			<p class="mb-4 text-3xl">Advanced Search</p>
 			<Input
-				placeholder="Search Hospital"
+				placeholder="Search Places"
 				class="bg-indigo-100 py-6 text-black"
 				bind:value={searchTerm}
 			/>
@@ -171,13 +211,14 @@
 					on:click={() => setLocation(request)}
 				>
 					<h1 class="w-80 text-2xl font-bold text-indigo-100">{request.placeName}</h1>
+					<p class="text-indigo-200">Contact: {request.phone}</p>
 					<p class="text-indigo-200">Incident: {request.incidentType}</p>
 					<div class="mt-2 flex justify-between text-indigo-200">
 						<p>
 							<span class="text-3xl font-bold">{request.volunteerCount} </span>
 							volunteers needed
 						</p>
-						<span class="text-3xl font-bold">{'Good'}</span>
+						<!-- <span class="text-3xl font-bold">{'Good'}</span> -->
 					</div>
 				</button>
 			</div>
@@ -187,12 +228,14 @@
 	<!-- Only show when selected -->
 	{#if selectedRequest}
 		<div
-			class="top-1/6 absolute right-0 z-10 m-8 h-fit w-96 overflow-y-auto rounded-xl bg-[#202124] p-4"
+			class="absolute right-5 top-10 z-10 m-8 h-fit w-96 overflow-y-auto rounded-xl bg-[#202124] p-4"
 		>
-			<p class="mb-4 text-3xl">Will you donate?</p>
+			<p class="mb-4 text-3xl">Will you help?</p>
+			<p>{selectedRequest.placeName}</p>
+			<p>People needed: {selectedRequest.volunteerCount}</p>
 			<Input
-				placeholder="How mane bags?"
-				class=" my-2 bg-indigo-100 py-6 text-black"
+				placeholder="How mane people?"
+				class="my-2 bg-indigo-100 py-6 text-black"
 				bind:value={count}
 			/>
 			<Button

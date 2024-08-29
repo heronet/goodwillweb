@@ -63,19 +63,18 @@
 	>
 		<div class="my-4 flex items-center gap-2">
 			<!-- <img src={magic} alt="magic" /> -->
-			<span class="text-2xl">Chat with AI Doctor</span>
+			<span class="text-2xl">Chat with AI</span>
 		</div>
 
 		<img src={arrow} alt="arr_d" />
 	</button>
 	{#if expanded}
-		<div class="h-[300px] overflow-y-scroll py-8 pr-4 text-sm" bind:this={textwall}>
+		<div class="h-[300px] overflow-y-scroll pr-4 text-sm" bind:this={textwall}>
 			{#if history.length === 0}
-				<p class="text-center text-indigo-300">Start chatting with AI</p>
+				<p class="py-8 text-center text-indigo-300">Start chatting with AI</p>
 				<p class="p-8 text-center text-muted-foreground">
-					Ask it questions like <span class="text-indigo-300"
-						>What is the nearest hospital for me?</span
-					>, or <span class="text-indigo-300">When will I be eligible to donate blood?</span> etc.
+					Ask it questions like <span class="text-indigo-300">What is the event for me?</span>, or
+					<span class="text-indigo-300">When will I be eligible attend?</span> etc.
 				</p>
 			{/if}
 			{#each history as text}

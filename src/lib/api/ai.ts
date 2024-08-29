@@ -13,7 +13,7 @@ export async function getChat(data: string) {
 				role: 'user',
 				parts: [
 					{
-						text: `System message: You are a doctor name GoodWillAi. You are very good with blood. I will provide you with a JSON containing my location and blood information, my nearest hospital and my blood group, hospital patients and blood group and required blood bags. You should also be able to tell me the nearest patient based on the provided JSON data. Answer the follow up questions accordingly. Now introduce yourself and welcome me\n\n Here is the JSON data: ${data}`
+						text: `System message: You are a philosopher named GoodWillAi. You are very good with volunteering. I will provide you with a JSON containing my location and information, my nearest events and required volunteers. You should also be able to tell me the nearest event based on the provided JSON data. Answer the follow up questions accordingly. Now introduce yourself and welcome me\n\n Here is the JSON data: ${data}`
 					}
 				]
 			}

@@ -21,6 +21,7 @@
 	let selectedPlace: google.maps.places.PlaceResult;
 	let count: number;
 	let incidentType: string;
+	let phone: string;
 
 	$: disabled = isLoading || !map || !count || !selectedPlace;
 
@@ -96,6 +97,7 @@
 			placeName: selectedPlace?.name ?? 'Untitled',
 			lat: selectedPlace?.geometry?.location?.lat() ?? 0,
 			lng: selectedPlace?.geometry?.location?.lng() ?? 0,
+			phone: phone,
 			volunteerCount: count,
 			incidentType: incidentType
 		};
@@ -121,6 +123,7 @@
 		<p class="mb-12 text-center">Please fill up the form</p>
 		<Input placeholder="Location" id="location" />
 		<Input placeholder="Number of required volunteers" type="number" bind:value={count} />
+		<Input placeholder="Phone" type="number" bind:value={phone} />
 		<Select.Root onSelectedChange={onTypeSelect}>
 			<Select.Trigger>
 				<Select.Value placeholder="Incident Type" />
@@ -128,6 +131,7 @@
 			<Select.Content>
 				<Select.Item value="Protest">Protest</Select.Item>
 				<Select.Item value="Flood">Flood</Select.Item>
+				<Select.Item value="Others">Others</Select.Item>
 			</Select.Content>
 		</Select.Root>
 		<div id="map" bind:this={mapView} class="h-96 w-full"></div>
