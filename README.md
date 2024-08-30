@@ -1,38 +1,171 @@
-# create-svelte
+<a name="readme-top"></a>
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+<!-- PROJECT SHIELDS -->
 
-## Creating a project
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![License][license-shield]][license-url]
+[![LinkedIn][linkedin-shield]][linkedin-url]
 
-If you're seeing this, you've probably already done this step. Congrats!
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <!-- <a href="https://github.com/heronet/goodwillweb">
+    <img src="images/logo.png" alt="Logo" width="80" height="80">
+  </a> -->
+  
+  <h3 align="center" style="font-size: 25px">GoodWill Frontend</h3>
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+  <p align="center">
+    The social media platform!
+    <br />
+    <a href="https://goodwillweb.vercel.app"><strong>See it live »</strong></a>
+    <br />
+    <br />
+    <a href="https://goodwillweb.vercel.app">View Demo</a>
+    ·
+    <a href="https://github.com/heronet/goodwillweb/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/heronet/goodwillweb/issues">Request Feature</a>
+  </p>
+</div>
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
+  </ol>
+</details>
 
-## Developing
+<!-- ABOUT THE PROJECT -->
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## About The Project
 
-```bash
-npm run dev
+GoodWill is a volunteer platform. It is a two part project. This is the `Frontend`. The `Backend` can be found [here](https://github.com/heronet/GoodWillApi).
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+- GoodWill uses `ASP.Net Core` for the `Backend` and `SvelteKit` for the `Frontend`. It uses `PostgreSQL` as the database.
+- The `Backend` uses `Docker` which is hosted on `Google Cloud Run`.
 
-## Building
+<!-- SCREENSHOT -->
 
-To create a production version of your app:
+<!-- [![goodwillweb Screen Shot][screenshot]](https://goodwillweb-si.web.app) -->
 
-```bash
-npm run build
-```
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-You can preview the production build with `npm run preview`.
+### Built With
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+- [![SvelteKit][SvelteKit]][sveltekit-url]
+- [![Dotnet][dotnet.microsoft.com]][dotnet-url]
+- [![PostgreSQL][postgresql.org]][postgresql-url]
+- [![Docker][docker.io]][docker-url]
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- GETTING STARTED -->
+
+## Getting Started
+
+To get a local copy up and running follow these simple steps.
+
+### Installation
+
+1. Clone the repo
+   ```sh
+   git clone https://github.com/heronet/goodwillweb.git
+   ```
+2. Restore Nuget dependencies
+   ```sh
+   npm install
+   ```
+3. Run the project
+   ```sh
+   npm run dev
+   ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- ROADMAP -->
+
+## Roadmap
+
+- [x] Add blood donation
+- [x] Add volunteer
+- [x] Add Google maps API
+- [x] Add profile page
+- [x] Add logs page
+
+See the [open issues](https://github.com/heronet/goodwillweb/issues) for a full list of proposed features (and known issues).
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- LICENSE -->
+
+## License
+
+Distributed under the GPLv3 License. See `LICENSE` for more information.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- CONTACT -->
+
+## Contact
+
+Sirat - sirat4757@gmail.com
+
+Project Link: [https://github.com/heronet/goodwillweb](https://github.com/heronet/goodwillweb)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- ACKNOWLEDGMENTS -->
+
+## Acknowledgments
+
+- [Img Shields](https://shields.io)
+- [Font Awesome](https://fontawesome.com)
+- [Othneildrew](https://github.com/othneildrew/Best-README-Template)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
+[contributors-shield]: https://img.shields.io/github/contributors/heronet/goodwillweb.svg?style=for-the-badge
+[contributors-url]: https://github.com/heronet/goodwillweb/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/heronet/goodwillweb.svg?style=for-the-badge
+[forks-url]: https://github.com/heronet/goodwillweb/network/members
+[stars-shield]: https://img.shields.io/github/stars/heronet/goodwillweb.svg?style=for-the-badge
+[stars-url]: https://github.com/heronet/goodwillweb/stargazers
+[issues-shield]: https://img.shields.io/github/issues/heronet/goodwillweb.svg?style=for-the-badge
+[issues-url]: https://github.com/heronet/goodwillweb/issues
+[license-shield]: https://img.shields.io/github/license/heronet/goodwillweb.svg?style=for-the-badge
+[license-url]: https://github.com/heronet/goodwillweb/blob/main/LICENSE
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[linkedin-url]: https://linkedin.com/in/siratul-islam
+[screenshot]: images/scr.png
+[angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
+[sveltekit-url]: https://kit.svelte.dev/
+[dotnet.microsoft.com]: https://img.shields.io/badge/Dotnet-512BD4?style=for-the-badge&logo=dotnet&logoColor=white
+[dotnet-url]: https://dotnet.microsoft.com/
+[postgresql.org]: https://img.shields.io/badge/Postgresql-4169E1?style=for-the-badge&logo=postgresql&logoColor=white
+[postgresql-url]: https://postgresql.org/
+[docker.io]: https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white
+[docker-url]: https://docker.io/
+[SvelteKit]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte
